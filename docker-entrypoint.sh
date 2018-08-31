@@ -25,25 +25,15 @@ do
   sleep 3
 done
 
-echo "Postgres is ready, running the migrations..."
-
+# Run migrations
 kong migrations up
 
-echo "Kong migrations are ready, running Kong..."
+# Prepare Kong configurations
+KONG_PREFIX=${KONG_PREFIX:-/usr/local/kong}
+mkdir -p $KONG_PREFIX && kong prepare -p $KONG_PREFIX
 
-export KONG_NGINX_DAEMON=off
-
-if [[ "$1" == "kong" ]]; then
-  PREFIX=${KONG_PREFIX:=/usr/local/kong}
-  mkdir -p $PREFIX
-
-  if [[ "$2" == "docker-start" ]]; then
-    kong prepare -p $PREFIX
-
-    exec /usr/local/openresty/nginx/sbin/nginx \
-      -p $PREFIX \
-      -c nginx.conf
-  fi
-fi
-
-exec "$@"
+# Run Kong!
+exec /usr/local/openresty/nginx/sbin/nginx \
+  -p $KONG_PREFIX \
+  -c nginx.conf \
+  $@
