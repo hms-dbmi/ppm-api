@@ -16,5 +16,5 @@ ENV CREATE_SSL=true
 # Copy the configs/templates
 COPY healthcheck.kong.conf $KONG_PREFIX/healthcheck.kong.conf
 
-# Inform Kong
-ENV KONG_NGINX_HTTP_INCLUDE=$KONG_PREFIX/healthcheck.kong.conf
+# Inform Kong to include the location in the proxy server
+ENV KONG_NGINX_PROXY_INCLUDE=$KONG_PREFIX/healthcheck.kong.conf
