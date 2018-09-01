@@ -6,12 +6,12 @@ RUN apk add --no-cache bash postgresql-client python3 py3-pip jq && \
 
 # Set entrypoint
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod a+x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Disable daemon
 ENV KONG_PREFIX=/usr/local/kong
 ENV KONG_NGINX_DAEMON=off
-ENV CREATE_SSL=true
 
 # Copy the configs/templates
 COPY healthcheck.kong.conf $KONG_PREFIX/healthcheck.kong.conf
