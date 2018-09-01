@@ -19,7 +19,8 @@ export KONG_PROXY_ERROR_LOG=${KONG_PROXY_ERROR_LOG:=/dev/stderr}
 export KONG_ADMIN_ERROR_LOG=${KONG_ADMIN_ERROR_LOG:=/dev/stderr}
 
 # Waiting for postgres
-until psql --host=$KONG_PG_HOST --username=$KONG_PG_USER $KONG_PG_DATABASE -w &>/dev/null
+export PGPASSWORD=$KONG_PG_PASSWORD
+until psql --host=$KONG_PG_HOST --username=$KONG_PG_USER --dbname=$KONG_PG_DATABASE -w &>/dev/null
 do
   echo "Waiting for PostgreSQL..."
   sleep 3
